@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cypress Capital Group, LLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        heading: ["'Instrument Serif'", "serif"],
+        body: ["'Barlow'", "sans-serif"],
+      },
+      colors: {
+        pine:    "#1B3D2F",
+        forest:  "#2D5E45",
+        sage:    "#4A7C5F",
+        mist:    "#E8EFE9",
+        cream:   "#F8F7F4",
+        gold:    "#B8975A",
+        ink:     "#111A14",
+      }
+    }
+  }
+}
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #F8F7F4; margin: 0; padding: 0; overflow-x: hidden; }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(4px);
+    transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                transform 0.75s cubic-bezier(0.22,1,0.36,1),
+                filter 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  .d1 { transition-delay: 0.08s; }
+  .d2 { transition-delay: 0.16s; }
+  .d3 { transition-delay: 0.24s; }
+  .d4 { transition-delay: 0.32s; }
+  .d5 { transition-delay: 0.40s; }
+  .d6 { transition-delay: 0.48s; }
+  .d7 { transition-delay: 0.56s; }
+  .d8 { transition-delay: 0.80s; }
+
+  /* ── BLUR WORD ── */
+  .blur-word {
+    display: inline-block;
+    margin-right: 0.22em;
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(40px);
+    transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
+                filter 0.65s ease,
+                transform 0.65s cubic-bezier(0.22,1,0.36,1);
+  }
+  .blur-word.visible { opacity: 1; filter: blur(0); transform: translateY(0); }
+
+  /* ── GLASS (on dark hero) ── */
+  .glass-pill {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+
+  /* ── DIVIDER LINE ── */
+  .rule { border: none; border-top: 1px solid #D5DDD6; }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff;
+    border: 1px solid #E0E8E2;
+    border-radius: 16px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .card:hover { box-shadow: 0 12px 40px rgba(27,61,47,0.10); transform: translateY(-2px); }
+
+  /* ── CRITERIA LIST ── */
+  .criteria-item::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: #B8975A;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* ── HERO VIDEO PLACEHOLDER ── */
+  .hero-bg {
+    background:
+      linear-gradient(to bottom, rgba(10,26,18,0.72) 0%, rgba(10,26,18,0.55) 60%, rgba(10,26,18,0.85) 100%),
+      radial-gradient(ellipse at 55% 40%, #2D5E45 0%, #0D2218 60%, #050e09 100%);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #F8F7F4; }
+  ::-webkit-scrollbar-thumb { background: #4A7C5F; border-radius: 3px; }
+
+  /* ── NAV LINK ── */
+  .nav-link {
+    position: relative;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .nav-link:hover { opacity: 1; }
+  .nav-link-dark {
+    color: #1B3D2F;
+    opacity: 0.65;
+  }
+  .nav-link-dark:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useRef, useEffect, useState, useCallback } = React;
+
+/* ── HOOKS ── */
+function useReveal(margin = "-8%") {
+  const ref = useRef(null);
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVis(true); obs.disconnect(); }
+    }, { rootMargin: margin });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, vis];
+}
+
+function useScrolled(threshold = 60) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > threshold);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, [threshold]);
+  return scrolled;
+}
+
+/* ── HELPERS ── */
+function Reveal({ children, delay = "", className = "", style = {}, tag: Tag = "div" }) {
+  const [ref, vis] = useReveal();
+  return <Tag ref={ref} className={`reveal ${delay} ${vis ? "visible" : ""} ${className}`} style={style}>{children}</Tag>;
+}
+
+function BlurText({ text, delayBase = 0 }) {
+  const [ref, vis] = useReveal("-5%");
+  return (
+    <span ref={ref}>
+      {text.split(" ").map((w, i) => (
+        <span key={i} className={"blur-word" + (vis ? " visible" : "")}
+          style={{ transitionDelay: `${delayBase + i * 0.09}s` }}>{w}</span>
+      ))}
+    </span>
+  );
+}
+
+/* ── NAVBAR ── */
+function Navbar() {
+  const scrolled = useScrolled(80);
+  return (
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      transition: "background 0.4s ease, box-shadow 0.4s ease, padding 0.3s ease",
+      background: scrolled ? "rgba(248,247,244,0.97)" : "transparent",
+      boxShadow: scrolled ? "0 1px 0 rgba(27,61,47,0.1)" : "none",
+      backdropFilter: scrolled ? "blur(12px)" : "none",
+      WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
+      paddingTop: scrolled ? 12 : 24,
+      paddingBottom: scrolled ? 12 : 24,
+      paddingLeft: 48, paddingRight: 48,
+    }}>
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        {/* Logo */}
+        <a href="#" style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src="https://static.wixstatic.com/media/89fc65_37b1322f587a4b54bc309ac33b22d213~mv2.png/v1/fill/w_274,h_83,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cypress_logo%20-%20Letterhead%20-%20Green.png"
+            alt="Cypress Capital Group"
+            style={{
+              height: 44, width: "auto",
+              filter: scrolled ? "none" : "brightness(0) invert(1)",
+              transition: "filter 0.4s ease",
+            }}
+          />
+        </a>
+        {/* Links */}
+        <div className="hidden md:flex items-center gap-8">
+          {["About","Team","Criteria","TRR","Contact"].map(l => (
+            l === "TRR"
+              ? <a key={l} href="TRR.html"
+                   className={scrolled ? "nav-link nav-link-dark" : "nav-link"}
+                   style={{color: scrolled ? "#B8975A" : "#B8975A", opacity:1}}>TRR</a>
+              : <a key={l} href={`#${l.toLowerCase()}`}
+                   className={scrolled ? "nav-link nav-link-dark" : "nav-link"}>{l}</a>
+          ))}
+          <a href="#contact"
+             style={{
+               background: scrolled ? "#1B3D2F" : "rgba(255,255,255,0.15)",
+               border: scrolled ? "1.5px solid #1B3D2F" : "1.5px solid rgba(255,255,255,0.35)",
+               color: "#fff",
+               borderRadius: 9999,
+               padding: "7px 20px",
+               fontSize: "0.8rem",
+               fontFamily: "'Barlow', sans-serif",
+               fontWeight: 500,
+               letterSpacing: "0.06em",
+               textTransform: "uppercase",
+               textDecoration: "none",
+               transition: "all 0.3s ease",
+               backdropFilter: scrolled ? "none" : "blur(8px)",
+             }}>
+            Get In Touch
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+/* ── HERO ── */
+function Hero() {
+  return (
+    <section id="about" className="hero-bg relative" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      {/* VIDEO PLACEHOLDER — swap with <video> tag */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px), repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,255,255,0.015) 80px, rgba(255,255,255,0.015) 81px)"
+        }} />
+      </div>
+
+      {/* Bottom fade to cream */}
+      <div style={{ position:"absolute", bottom:0, left:0, right:0, height:200, background:"linear-gradient(to bottom, transparent, #F8F7F4)", zIndex:2, pointerEvents:"none" }} />
+
+      {/* Content */}
+      <div className="relative px-12 lg:px-20 pb-28 pt-36 max-w-7xl mx-auto w-full" style={{ zIndex: 3 }}>
+        {/* Label */}
+        <div className={"reveal d1 visible glass-pill inline-block rounded-full px-4 py-1.5 mb-8"}>
+          <span style={{ fontSize: "0.7rem", fontFamily: "'Barlow',sans-serif", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)" }}>
+            Pacific Northwest · Private Capital & Advisory
+          </span>
+        </div>
+
+        {/* Heading */}
+        <h1 style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)", fontFamily: "'Instrument Serif',serif", fontStyle: "italic", color: "#fff", lineHeight: 0.88, letterSpacing: "-1px", maxWidth: 820, marginBottom: "2rem", fontWeight: 400 }}>
+          <BlurText text="An integrated merchant bank built on lasting partnerships." delayBase={0.15} />
+        </h1>
+
+        {/* Sub */}
+        <div className="reveal d8 visible" style={{ maxWidth: 520 }}>
+          <p style={{ fontFamily: "'Barlow',sans-serif", fontWeight: 300, fontSize: "1.05rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.65, margin: 0 }}>
+            Cypress Capital Group serves long-term investors, entrepreneurs, and business owners across the Pacific Northwest — deploying capital and advisory expertise built on decades of aligned experience.
+          </p>
+        </div>
+
+        {/* CTAs */}
+        <div className="reveal d8 visible flex items-center gap-4 mt-10 flex-wrap">
+          <a href="#investments" style={{
+            background: "#B8975A", color: "#fff", borderRadius: 9999,
+            padding: "12px 28px", fontFamily: "'Barlow',sans-serif", fontWeight: 500,
+            fontSize: "0.85rem", letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none",
+            transition: "opacity 0.2s", display:"inline-flex", alignItems:"center", gap:8
+          }}>
+            Our Approach
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          <a href="#contact" style={{
+            background: "rgba(255,255,255,0.12)", border: "1.5px solid rgba(255,255,255,0.3)",
+            color: "#fff", borderRadius: 9999, padding: "11px 28px",
+            fontFamily: "'Barlow',sans-serif", fontWeight: 500, fontSize: "0.85rem",
+            letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none",
+            backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)"
+          }}>
+            Contact Us
+          </a>
+          <a href="TRR.html" style={{
+            display:"inline-flex", alignItems:"center", gap:8,
+            background:"rgba(184,151,90,0.15)",
+            border:"1.5px solid rgba(184,151,90,0.55)",
+            color: "#B8975A", borderRadius: 9999, padding: "11px 24px",
+            fontFamily: "'Barlow',sans-serif", fontWeight: 500,
+            fontSize: "0.85rem", letterSpacing: "0.06em", textTransform: "uppercase",
+            textDecoration: "none", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)",
+          }}>
+            Transaction Readiness Review
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B8975A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </div>
+
+        {/* Stats bar */}
+        <div className="reveal d8 visible flex items-center gap-12 mt-20 flex-wrap">
+          {[["Pacific Northwest","Focus Region"], ["Middle Market","Investment Stage"], ["Decades","Combined Experience"]].map(([val, lbl]) => (
+            <div key={lbl}>
+              <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.6rem", color:"#fff", lineHeight:1 }}>{val}</div>
+              <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.75rem", color:"rgba(255,255,255,0.45)", marginTop:4, letterSpacing:"0.06em", textTransform:"uppercase" }}>{lbl}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── SECTION LABEL ── */
+function SectionLabel({ children }) {
+  return (
+    <span style={{
+      fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.7rem",
+      letterSpacing:"0.14em", textTransform:"uppercase", color:"#B8975A",
+      display:"inline-block", marginBottom:16
+    }}>{children}</span>
+  );
+}
+
+/* ── OVERVIEW ── */
+function Overview() {
+  return (
+    <section style={{ background: "#F8F7F4", padding: "100px 0 80px" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <Reveal delay="d1"><SectionLabel>Who We Are</SectionLabel></Reveal>
+            <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#1B3D2F", lineHeight:0.95, letterSpacing:"-0.5px", margin:"0 0 24px", fontWeight:400 }}>
+              Where founders, families, and capital align.
+            </Reveal>
+            <Reveal delay="d3">
+              <hr className="rule" style={{ marginBottom:24 }} />
+            </Reveal>
+          </div>
+          <div>
+            <Reveal delay="d3" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1.05rem", color:"#3A4F41", lineHeight:1.75, margin:"0 0 20px" }}>
+              Cypress Capital Group is a private capital investment and advisory firm serving the distinct needs of long-term, strategic and often family office investors, as well as entrepreneurs, operators, and business owners.
+            </Reveal>
+            <Reveal delay="d4" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1.05rem", color:"#3A4F41", lineHeight:1.75, margin:"0 0 28px" }}>
+              Our collaborative approach provides a unique offering in that we look to form lasting partnerships with investors and businesses alike, unlocking a wide array of structural opportunities.
+            </Reveal>
+            <Reveal delay="d5" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1.05rem", color:"#3A4F41", lineHeight:1.75, margin:0 }}>
+              We distinguish ourselves with decades of experience advising at the intersection of founders, families, and businesses, as well as by our differentiated capital base and culture of aligned investing.
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── INVESTMENTS ── */
+function Investments() {
+  return (
+    <section id="investments" style={{ background: "#1B3D2F", padding: "100px 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <Reveal delay="d1">
+              <SectionLabel><span style={{color:"#8FBD9F"}}>Private Investments</span></SectionLabel>
+            </Reveal>
+            <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#fff", lineHeight:0.95, letterSpacing:"-0.5px", margin:"0 0 24px", fontWeight:400 }}>
+              Partners-first capital for Pacific Northwest businesses.
+            </Reveal>
+            <Reveal delay="d3">
+              <div style={{ width:40, height:2, background:"#B8975A", marginBottom:28 }} />
+            </Reveal>
+            <Reveal delay="d4" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"rgba(255,255,255,0.65)", lineHeight:1.75 }}>
+              Cypress Investment Partners deploys its own and its partners' capital into private, often founder-owned businesses across a variety of industry verticals. To ensure constant communication and facetime, we focus on businesses based in the broader Pacific Northwest, including Alaska, Hawaii, and British Columbia.
+            </Reveal>
+          </div>
+          <div className="flex flex-col gap-4 mt-2">
+            {[
+              ["Relationship-Driven","Leveraging extensive networks — alongside those of our investors — we seek to engage with businesses where strong, long-standing relationships already exist."],
+              ["Aligned Capital Base","We curate a capital base of strategically aligned and incentivized partners alongside a practical investment structure to optimize the desired outcome of the parties."],
+              ["Long-Term Partnership","Taking a collaborative approach, we work closely with founders and management teams to preserve company culture while driving sustainable growth."],
+              ["Flexible Structures","Our investments typically support ownership transitions, liquidity, growth initiatives, and strategic acquisitions."],
+            ].map(([title, body], i) => (
+              <Reveal key={title} delay={`d${i+2}`} className="card" style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", padding:"20px 24px" }}>
+                <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.1rem", color:"#B8975A", marginBottom:6 }}>{title}</div>
+                <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.9rem", color:"rgba(255,255,255,0.55)", lineHeight:1.65 }}>{body}</div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── ADVISORY ── */
+function Advisory() {
+  const services = ["Sell-side M&A advisory","Buy-side advisory","Private capital raising","Valuation assessments","Corporate advisory","Board strategic guidance"];
+  return (
+    <section id="advisory" style={{ background: "#F8F7F4", padding: "100px 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <Reveal delay="d1"><SectionLabel>Advisory Services</SectionLabel></Reveal>
+            <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#1B3D2F", lineHeight:0.95, letterSpacing:"-0.5px", margin:"0 0 24px", fontWeight:400 }}>
+              A comprehensive suite built on decades of expertise.
+            </Reveal>
+            <Reveal delay="d3">
+              <div style={{ width:40, height:2, background:"#B8975A", marginBottom:28 }} />
+            </Reveal>
+            <Reveal delay="d4" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"#3A4F41", lineHeight:1.75, marginBottom:20 }}>
+              Cypress Advisory Services provides a comprehensive suite of services across middle-market businesses. With multiple decades of expertise in investment banking, operations, law, and accounting, we bring a well-rounded perspective to every engagement.
+            </Reveal>
+            <Reveal delay="d5" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"#3A4F41", lineHeight:1.75 }}>
+              Our processes are designed to be customized and efficient, while always prioritizing trust, transparency, and value creation.
+            </Reveal>
+          </div>
+          <div>
+            <Reveal delay="d2">
+              <div className="card" style={{ padding:"36px 36px", overflow:"hidden" }}>
+                <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.7rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"#B8975A", marginBottom:20 }}>
+                  Services
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+                  {services.map((s, i) => (
+                    <Reveal key={s} delay={`d${i+2}`}>
+                      <div style={{
+                        display:"flex", alignItems:"center", gap:14,
+                        padding:"18px 0",
+                        borderBottom: i < services.length - 1 ? "1px solid #E0E8E2" : "none"
+                      }}>
+                        <div style={{ width:6, height:6, borderRadius:"50%", background:"#B8975A", flexShrink:0 }} />
+                        <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:400, fontSize:"0.975rem", color:"#1B3D2F" }}>{s}</span>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+                <Reveal delay="d8">
+                  <div style={{ marginTop:28, padding:"16px 20px", background:"#F0F5F1", borderRadius:10 }}>
+                    <p style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.85rem", color:"#3A4F41", lineHeight:1.6, margin:0 }}>
+                      We apply the same partnership-driven approach to our advisory work as we do to our investments — fostering long-term success tailored to each client's unique needs.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── TEAM ── */
+function Team() {
+  const members = [
+    { name:"Brian Bogen", title:"Managing Partner", photo:"https://static.wixstatic.com/media/89fc65_8cdc153fead548ba884cb5fc3c39ebdf~mv2.png/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Brian-Clean%20Background_edited.png" },
+    { name:"Jamie Boyd",  title:"Managing Partner", photo:"https://static.wixstatic.com/media/89fc65_88679fde60244591be182c2b228cd38e~mv2.png/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Jamie-Clean%20Background_edited.png" },
+    { name:"Alex Smith",  title:"Partner",          photo:"https://static.wixstatic.com/media/89fc65_94ed863097204e34958c0b01cf3842ce~mv2.png/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Alex-Clean%20Background_edited.png" },
+  ];
+  return (
+    <section id="team" style={{ background:"#1B3D2F", padding:"100px 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="flex flex-col items-center text-center mb-16">
+          <Reveal delay="d1"><SectionLabel><span style={{color:"#8FBD9F"}}>The Team</span></SectionLabel></Reveal>
+          <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#fff", lineHeight:0.95, letterSpacing:"-0.5px", margin:"0 0 16px", fontWeight:400 }}>
+            Founding Partners
+          </Reveal>
+          <Reveal delay="d3" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"rgba(255,255,255,0.5)", maxWidth:480, lineHeight:1.65 }}>
+            Decades of combined experience in investment banking, operations, law, and accounting.
+          </Reveal>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {members.map((m, i) => (
+            <Reveal key={m.name} delay={`d${i+2}`}>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}>
+                <div style={{
+                  width: 200, height: 200, borderRadius: "50%",
+                  overflow:"hidden", border:"3px solid rgba(184,151,90,0.4)",
+                  marginBottom:24, background:"rgba(255,255,255,0.05)"
+                }}>
+                  <img src={m.photo} alt={m.name} style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top" }} />
+                </div>
+                <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.4rem", color:"#fff", textAlign:"center" }}>{m.name}</div>
+                <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:400, fontSize:"0.8rem", color:"#8FBD9F", letterSpacing:"0.1em", textTransform:"uppercase", marginTop:6, textAlign:"center" }}>{m.title}</div>
+                <div style={{ width:32, height:1.5, background:"#B8975A", marginTop:16 }} />
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── CRITERIA ── */
+function Criteria() {
+  return (
+    <section id="criteria" style={{ background:"#F8F7F4", padding:"100px 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="flex flex-col items-center text-center mb-16">
+          <Reveal delay="d1"><SectionLabel>Criteria</SectionLabel></Reveal>
+          <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#1B3D2F", lineHeight:0.95, letterSpacing:"-0.5px", margin:"0 0 16px", fontWeight:400 }}>
+            What we look for.
+          </Reveal>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Private Investments */}
+          <Reveal delay="d2" className="card" style={{ padding:"48px" }}>
+            <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.7rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"#B8975A", marginBottom:12 }}>Private Investments</div>
+            <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.15rem", color:"#1B3D2F", marginBottom:24, lineHeight:1.3 }}>
+              We invest in private, often founder-owned businesses where we can build genuine partnerships.
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+              {[
+                "Diversified industrial and business services end markets",
+                "Positive EBITDA with sustainable growth opportunity",
+                "Control transactions preferred; minority structures considered",
+                "Prefer founder-owned / first institutional capital situations",
+                "Strong management and culture",
+              ].map((item, i, arr) => (
+                <div key={item} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"13px 0", borderBottom: i < arr.length-1 ? "1px solid #E8EEE9" : "none" }}>
+                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#B8975A", flexShrink:0, marginTop:7 }} />
+                  <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.925rem", color:"#3A4F41", lineHeight:1.65 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          {/* Advisory */}
+          <Reveal delay="d3" className="card" style={{ padding:"48px" }}>
+            <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.7rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"#B8975A", marginBottom:12 }}>Advisory Services</div>
+            <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.15rem", color:"#1B3D2F", marginBottom:24, lineHeight:1.3 }}>
+              We advise businesses and investors on a range of strategic transactions.
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+              {[
+                "M&A sell-side advisory",
+                "Buy-side advisory",
+                "Private capital raising",
+                "Corporate advisory",
+              ].map((item, i, arr) => (
+                <div key={item} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"13px 0", borderBottom: i < arr.length-1 ? "1px solid #E8EEE9" : "none" }}>
+                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#B8975A", flexShrink:0, marginTop:7 }} />
+                  <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.875rem", color:"#3A4F41", lineHeight:1.6, whiteSpace:"nowrap" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── TRR TEASER ── */
+function TRRTeaser() {
+  return (
+    <section style={{ background:"#1B3D2F", padding:"100px 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <Reveal delay="d1">
+              <div style={{ display:"inline-block", background:"rgba(184,151,90,0.15)", border:"1px solid rgba(184,151,90,0.3)", borderRadius:9999, padding:"5px 14px", marginBottom:20 }}>
+                <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.68rem", letterSpacing:"0.14em", textTransform:"uppercase", color:"#B8975A" }}>Advisory Product</span>
+              </div>
+            </Reveal>
+            <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2rem,3.5vw,3rem)", color:"#fff", lineHeight:0.92, letterSpacing:"-0.5px", margin:"0 0 8px", fontWeight:400 }}>
+              Transaction Readiness Review
+            </Reveal>
+            <Reveal delay="d3">
+              <div style={{ width:32, height:2, background:"#B8975A", margin:"20px 0 24px" }} />
+            </Reveal>
+            <Reveal delay="d4" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"rgba(255,255,255,0.6)", lineHeight:1.75, marginBottom:32 }}>
+              Great businesses don't always translate to great transaction outcomes — at least not right away. Our TRR is a structured four-to-six week engagement that prepares your business operationally, financially, and commercially for an M&A or private capital raise process that is 12 to 36 months out.
+            </Reveal>
+            <Reveal delay="d5">
+              <a href="TRR.html" style={{
+                display:"inline-flex", alignItems:"center", gap:8,
+                background:"#B8975A", color:"#fff", borderRadius:9999,
+                padding:"13px 28px", fontFamily:"'Barlow',sans-serif", fontWeight:500,
+                fontSize:"0.85rem", letterSpacing:"0.06em", textTransform:"uppercase",
+                textDecoration:"none",
+              }}>
+                Learn About the TRR
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </a>
+            </Reveal>
+          </div>
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {[
+              { num:"01", title:"Readiness Report", body:"Investment highlights, performance assessment, illustrative valuation range, and a pre-transaction action plan." },
+              { num:"02", title:"5-Year Financial Model", body:"Assumption-driven, top-down financial forecast built in a format familiar to investors and buyers." },
+              { num:"03", title:"CIM Outline & Template", body:"A customized Confidential Information Memorandum outline structured specifically for your business." },
+              { num:"04", title:"Investor Reaction Summary", body:"Anonymous feedback and observations from conversations with industry-informed investors." },
+            ].map((item, i) => (
+              <Reveal key={item.num} delay={`d${i+2}`}>
+                <div style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.09)", borderRadius:12, padding:"18px 22px", display:"flex", gap:16, alignItems:"flex-start" }}>
+                  <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1rem", color:"rgba(184,151,90,0.5)", flexShrink:0, marginTop:1 }}>{item.num}</div>
+                  <div>
+                    <div style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"1.05rem", color:"#fff", marginBottom:4 }}>{item.title}</div>
+                    <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.85rem", color:"rgba(255,255,255,0.45)", lineHeight:1.6 }}>{item.body}</div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── CONTACT / FOOTER ── */
+function ContactFooter() {
+  return (
+    <section id="contact" style={{ background:"#111A14", padding:"100px 0 0" }}>
+      <div className="max-w-7xl mx-auto px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start pb-20">
+          <div>
+            <Reveal delay="d1"><SectionLabel><span style={{color:"#8FBD9F"}}>Contact</span></SectionLabel></Reveal>
+            <Reveal delay="d2" tag="h2" style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(2.2rem,4vw,3.5rem)", color:"#fff", lineHeight:0.92, letterSpacing:"-0.5px", margin:"0 0 24px", fontWeight:400 }}>
+              Let's start a conversation.
+            </Reveal>
+            <Reveal delay="d3" tag="p" style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"1rem", color:"rgba(255,255,255,0.5)", lineHeight:1.75, marginBottom:32 }}>
+              Whether you're a business owner exploring your options or an investor seeking differentiated opportunities — we'd welcome the chance to connect.
+            </Reveal>
+            <Reveal delay="d4">
+              <a href="mailto:info@cypresscapitalllc.com" style={{
+                display:"inline-flex", alignItems:"center", gap:8,
+                background:"#B8975A", color:"#fff", borderRadius:9999,
+                padding:"12px 28px", fontFamily:"'Barlow',sans-serif", fontWeight:500,
+                fontSize:"0.85rem", letterSpacing:"0.06em", textTransform:"uppercase",
+                textDecoration:"none"
+              }}>
+                info@cypresscapitalllc.com
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </a>
+            </Reveal>
+          </div>
+          <Reveal delay="d3" className="card" style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", padding:"40px", borderRadius:16 }}>
+            <div style={{ fontFamily:"'Barlow',sans-serif", fontWeight:500, fontSize:"0.7rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"#8FBD9F", marginBottom:24 }}>Quick Links</div>
+            {[["LinkedIn","https://www.linkedin.com/company/cypress-capital-group-llc"],["Segment Overviews","https://www.cypresscapitalllc.com/segment-overviews"]].map(([label, href]) => (
+              <a key={label} href={href} target="_blank" rel="noopener"
+                 style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"20px 0", borderBottom:"1px solid rgba(255,255,255,0.07)", textDecoration:"none" }}>
+                <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:400, fontSize:"0.95rem", color:"rgba(255,255,255,0.65)" }}>{label}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(184,151,90,0.7)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </a>
+            ))}
+          </Reveal>
+        </div>
+
+        {/* Footer bar */}
+        <div style={{ borderTop:"1px solid rgba(255,255,255,0.08)", padding:"24px 0", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
+          <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.78rem", color:"rgba(255,255,255,0.3)" }}>
+            © 2025 Cypress Capital Group, LLC
+          </span>
+          <span style={{ fontFamily:"'Barlow',sans-serif", fontWeight:300, fontSize:"0.72rem", color:"rgba(255,255,255,0.25)", maxWidth:560, textAlign:"right", lineHeight:1.5 }}>
+            Securities offered through Cascadia Capital, LLC, member FINRA/SIPC. Cypress Capital Group, LLC and Cascadia Capital, LLC are independent entities.
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── APP ── */
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <Hero />
+      <Overview />
+      <Investments />
+      <Advisory />
+      <TRRTeaser />
+      <Team />
+      <Criteria />
+      <ContactFooter />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
